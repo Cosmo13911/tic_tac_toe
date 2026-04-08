@@ -89,12 +89,6 @@ button:hover {
     }
 }
 
-@media (max-height: 375) {
-    .container {
-        height: 0vh;
-    }
-}
-
 .bgBeforeStart {
     background: rgb(255, 115, 0);
 }
