@@ -1,9 +1,14 @@
 const grids = document.querySelectorAll('.grid');
 const startBtn = document.querySelector('button');
 const statusText = document.querySelector('.status');
+const container = document.querySelector('.container');
 
 let gameActive = false;
 let currentPlayer = 'X';
+let randomIndex = null;
+let randomId;
+let randomIndexClear = null;
+let randomIdClear;
 
 statusText.innerText = 'Click Start Button to Start!'
 
@@ -26,12 +31,8 @@ function active() {
 }
 
 function start() {
-    gameActive = true;
-    grids.forEach(grid => {
-        grid.classList.remove('active', 'xPlayer', 'oPlayer');
-        grid.innerText = '';
-    });
-    statusText.innerText = `Player: ${currentPlayer}`
+    clearInterval(randomId);
+    clear();
 }
 
 function end() {
@@ -45,6 +46,9 @@ function end() {
         if (isActive(grids[a]) !== '' && isActive(grids[a]) === isActive(grids[b]) && isActive(grids[b]) === isActive(grids[c])){
             gameActive = false;
             console.log([grids[a], grids[b], grids[c]]);
+            grids[a].classList.add('bgBeforeStart');
+            grids[b].classList.add('bgBeforeStart');
+            grids[c].classList.add('bgBeforeStart');
             statusText.innerText = `Player "${currentPlayer}" Win!`;
             break;
         }
@@ -57,6 +61,7 @@ function end() {
     if (gameActive) {
         currentPlayer = currentPlayer == 'X' ? 'O': 'X';
         statusText.innerText = `Player: ${currentPlayer}`
+        addCursor(currentPlayer);
     }
 }
 
@@ -80,6 +85,54 @@ function addPlayerStyle(player) {
         player.classList.add('oPlayer');
     }
 }
+
+
+function animate() {
+    randomId = setInterval(() => {
+        if (randomIndex != null) {
+            grids[randomIndex].classList.remove('bgBeforeStart');
+        }
+        randomIndex = Math.floor(Math.random() * 9)
+        console.log(randomIndex)    
+        grids[randomIndex].classList.add('bgBeforeStart');
+    }, 777);
+}
+
+function clear() {
+    randomIdClear = setInterval(() => {
+    randomIndexClear = Math.floor(Math.random() * 9)
+    console.log(randomIndexClear)    
+    grids[randomIndexClear].classList.add('bgBeforeStart');
+    
+    if ([...grids].every(grid => grid.classList.contains('bgBeforeStart'))) {
+        setTimeout(() => {
+            clearInterval(randomIdClear);
+            grids.forEach(grid => {
+                grid.classList.remove('active', 'xPlayer', 'oPlayer', 'bgBeforeStart');
+                grid.innerText = '';
+            });
+        }, 500);
+        
+        gameActive = true;
+        statusText.innerText = `Player: ${currentPlayer}`
+        console.log(gameActive);
+    }
+    }, 33);
+}
+
+function addCursor(player) {
+    if (player === 'X') {
+        container.classList.add('cursor-x');
+        container.classList.remove('cursor-o');
+    }
+    else {
+        container.classList.add('cursor-o');
+        container.classList.remove('cursor-x');
+    }
+        
+}
+
+window.onload = animate;
 
 grids.forEach(grid => grid.addEventListener('click', active));
 grids.forEach(grid => grid.classList.add('active'));
