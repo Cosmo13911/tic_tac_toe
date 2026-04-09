@@ -95,7 +95,7 @@ function animate() {
         randomIndex = Math.floor(Math.random() * 9)
         console.log(randomIndex)    
         grids[randomIndex].classList.add('bgBeforeStart');
-    }, 777);
+    }, 543);
 }
 
 function clear() {
@@ -117,7 +117,7 @@ function clear() {
         statusText.innerText = `Player: ${currentPlayer}`
         console.log(gameActive);
     }
-    }, 33);
+    }, 34);
 }
 
 function addCursor(player) {
